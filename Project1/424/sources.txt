@@ -1,0 +1,5 @@
+Notes:
+
+used this website to generate permutations
+http://juliusdavies.ca/andre/permutations.html
+
