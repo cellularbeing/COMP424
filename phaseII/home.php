@@ -1,5 +1,7 @@
 <?php 
 	session_start();
+
+	$db = mysqli_connect("localhost", "root", "root", "Security424");
 ?>
 
 <!DOCTYPE html>
@@ -14,9 +16,17 @@
 	<body>
 		<div class="mainContent">
 			<div>
-				<h2>Hello <?php echo $_SESSION['username'];?></h2>
-				<h4>Total Log in count:</h4>
-				<p>In progress(see the db)</p>
+				<h2>Hi <?php echo $_SESSION['username'];?></h2>
+				<?php	
+					$username = $_SESSION['username'];
+					echo "<p>".$testing."</p>";
+					$sql = "SELECT loginCount FROM users WHERE username= '$username'";
+					$result = $db->query($sql);
+					$row = $result->fetch_assoc();
+					echo "<p>You have logged in: times.".$row['loginCount']."</p>";
+
+					//echo "<p>You have logged in: times.".$testing."</p>";
+				?>
 			</div>
 			<div>
 				<a href="logout.php">Logout</a>
