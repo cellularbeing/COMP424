@@ -5,6 +5,17 @@
 	color: white;
 	text-align: center;
 }
+
+#error_msg{
+	width: 50%;  
+	margin: 1px auto; 
+	height: 30px; 
+	border: 1px solid #FF0000; 
+	background: #FFB9B8; 
+	color: #FF0000;
+	text-align: center;
+	padding-top: 1px;
+}
 .mainContent{
 	border: 2px solid black;
     border-radius: 5px;
@@ -21,5 +32,6 @@
 body{
 	border: 2px solid black;
     border-radius: 5px;
-    height: 
+    height;
 }
+

@@ -19,7 +19,6 @@
 				<h2>Hi <?php echo $_SESSION['username'];?></h2>
 				<?php	
 					$username = $_SESSION['username'];
-					echo "<p>".$testing."</p>";
 					$sql = "SELECT loginCount FROM users WHERE username= '$username'";
 					$result = $db->query($sql);
 					$row = $result->fetch_assoc();
