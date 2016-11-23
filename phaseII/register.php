@@ -15,6 +15,7 @@
 			$lastName = $_POST['lastName'];
 			$password = $_POST['password'];
 			$password2 = $_POST['password2'];
+            $salt = substr(md5(uniqid(rand(),true)),0,12);
 			$loginCount = 1;
 
 			
@@ -24,8 +25,9 @@
 
 			if ($password == $password2 && $response.success) {
 				// create user
-				$password = md5($password); //hash password before storing for security purposes
-				$sql = "INSERT INTO users(username, email, password, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$loginCount', '$lastName', '$firstName')";
+                  $password = hash("sha512", $password . $salt);
+                
+				$sql = "INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$salt', '$loginCount', '$lastName', '$firstName')";
 				mysqli_query($db, $sql);
 				$_SESSION['message'] = "You are now logged in";
 				$_SESSION['username'] = $username;

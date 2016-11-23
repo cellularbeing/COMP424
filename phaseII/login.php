@@ -7,9 +7,17 @@
 	if (isset($_POST['login_btn'])) {
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		$password = md5($password); // remember we hashed password before storing last time
-		$sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-		$result = mysqli_query($db, $sql);
+		  //$password = hash("sha512", $password . $salt); // remember we hashed password before storing last time
+        
+		//$sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+		//$result = mysqli_query($db, $sql);
+        
+        //Check database for entered username
+			$query = "SELECT * FROM users WHERE username = '$username'";
+			$result = mysqli_query($db, $query);
+			$userRow = mysqli_fetch_assoc($result);
+			$password = hash("sha512", $password . $userRow["salt"]);
+        
 		if (mysqli_num_rows($result) == 1) {
 			$query = "UPDATE users SET loginCount=loginCount + 1 WHERE username='$username'";
 			mysqli_query($db, $query);
@@ -20,7 +28,6 @@
 		}
 	}
 ?>
-
 
 
 <!DOCTYPE html>
