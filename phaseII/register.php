@@ -7,6 +7,8 @@
 		session_start();
 		$username = $_POST['username'];
 		$email = $_POST['email'];
+		$firstName = $_POST['firstName'];
+		$lastName = $_POST['lastName'];
 		$password = $_POST['password'];
 		$password2 = $_POST['password2'];
 		$loginCount = 1;
@@ -14,7 +16,7 @@
 		if ($password == $password2) {
 			// create user
 			$password = md5($password); //hash password before storing for security purposes
-			$sql = "INSERT INTO users(username, email, password, loginCount) VALUES('$username', '$email', '$password', '$loginCount')";
+			$sql = "INSERT INTO users(username, email, password, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$loginCount', '$lastName', '$firstName')";
 			mysqli_query($db, $sql);
 			$_SESSION['message'] = "You are now logged in";
 			$_SESSION['username'] = $username;
@@ -48,13 +50,21 @@
 		<form method="post" action="register.php">
 			<table>
 				<tr>
-					<td>Username:</td>
-					<td><input type="text" name="username" class="textInput"></td>
+					<td>First Name:</td>
+					<td><input type="text" name="firstName" class="textInput"></td>
 				</tr>
+				<tr>
+					<td>Last Name:</td>
+					<td><input type="text" name="lastName" class="textInput"></td>
+				</tr>				
 				<tr>
 					<td>Email:</td>
 					<td><input type="email" name="email" class="textInput"></td>
 				</tr>
+				<tr>
+					<td>Username:</td>
+					<td><input type="text" name="username" class="textInput"></td>
+				</tr>				
 				<tr>
 					<td>Password:</td>
 					<td><input type="password" name="password" class="textInput"></td>
