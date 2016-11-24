@@ -1,13 +1,15 @@
 <?php 
 	session_start();
 	// connect to database
-	//$db = mysqli_connect("localhost", "root", "root", "Security424");
-    $db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
 
 	if (isset($_POST['login_btn'])) {
+
+		$_SESSION['last_login_timestamp'] = time();
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		  //$password = hash("sha512", $password . $salt); // remember we hashed password before storing last time
+		  //$password = hash("sha512", $password . $salt); 
         
 		//$sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
 		//$result = mysqli_query($db, $sql);
