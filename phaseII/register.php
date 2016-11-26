@@ -1,39 +1,51 @@
 <?php 
 	session_start();
 	// connect to database
-	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+    $db = mysqli_connect("localhost", "root", "", "424"); // Steven
 
-
+	$error = false;
 	if (isset($_POST['register_btn'])) {
 
 		if($_POST['g-recaptcha-response']){ 
-			session_start();
+			//session_start(); // Notice alert
 			$username = $_POST['username'];
 			$email = $_POST['email'];
 			$firstName = $_POST['firstName'];
 			$lastName = $_POST['lastName'];
 			$password = $_POST['password'];
 			$password2 = $_POST['password2'];
-            $salt = substr(md5(uniqid(rand(),true)),0,12);
-			$loginCount = 1;
-
+            $salt = substr(md5(uniqid(rand(),true)),0,12); // Create random salt
+			$loginCount = 0;
+			$_SESSION['message'] = "Error:";
 			
 	        $captcha=$_POST['g-recaptcha-response'];
 
 	        $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LeNugwUAAAAAIpFDAFi9d53x2nEs3IHP-BexsbS&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']);
-
-			if ($password == $password2 && $response.success) {
-				// create user
-                  $password = hash("sha512", $password . $salt);
-                
+			
+			// check if username already exists in database
+			$query = "SELECT * FROM users WHERE username = '$username'";
+			$result = mysqli_query($db, $query);
+			if(mysqli_num_rows($result) > 0){ 
+				$error = true;
+				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "Username already exists";
+			}
+			
+			// check if password matches
+			if ($password === $password2) {	
+			}else{
+				$error = true;
+				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "The two passwords do not match";
+			}
+			
+			//create user
+			if(!$error && $response.success){
+				$password = hash("sha512", $password . $salt);
 				$sql = "INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$salt', '$loginCount', '$lastName', '$firstName')";
 				mysqli_query($db, $sql);
 				$_SESSION['message'] = "You are now logged in";
 				$_SESSION['username'] = $username;
 				header("location: home.php"); //redirect to home page
-			}else{
-				$_SESSION['message'] = "The two passwords do not match";
 			}
 		}
 		else{
@@ -42,8 +54,6 @@
 	}
 
 ?>
-
-
 
 <!DOCTYPE html>
 <html>
@@ -56,14 +66,14 @@
 		<script src='https://www.google.com/recaptcha/api.js'></script>	
 	</head>
 <body>
-	<div class="mainContent">
 		<?php
-			if (isset($_SESSION['message'])) {
+			if ($error) {
 				echo "<div id='error_msg'>".$_SESSION['message']."</div>";
 				unset($_SESSION['message']);
 			}
 		?>
-
+	<div class="mainContent">
+	
 		<form method="post" action="register.php">
 			<table>
 				<tr>

@@ -1,36 +1,33 @@
 <?php 
 	session_start();
 	// connect to database
-	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+    $db = mysqli_connect("localhost", "root", "", "424"); // Steven
 
 	if (isset($_POST['login_btn'])) {
 
 		$_SESSION['last_login_timestamp'] = time();
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		  //$password = hash("sha512", $password . $salt); 
-        
-		//$sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-		//$result = mysqli_query($db, $sql);
         
         //Check database for entered username
-			$query = "SELECT * FROM users WHERE username = '$username'";
-			$result = mysqli_query($db, $query);
-			$userRow = mysqli_fetch_assoc($result);
-			$password = hash("sha512", $password . $userRow["salt"]);
-        
-		if (mysqli_num_rows($result) == 1) {
+		$query = "SELECT * FROM users WHERE username = '$username'";
+		$result = mysqli_query($db, $query);
+		$userRow = mysqli_fetch_assoc($result);
+		$password = hash("sha512", $password . $userRow["salt"]); //hash password with appended salt
+	
+		//Check hashed entered password with password in database
+		if($password === $userRow["password"]){
 			$query = "UPDATE users SET loginCount=loginCount + 1 WHERE username='$username'";
 			mysqli_query($db, $query);
 			$_SESSION['username'] = $username;
 			header("location: home.php"); //redirect to home page
-		}else{
+		}
+		else{
 			$_SESSION['message'] = "Username/password combination incorrect";
 		}
-	}
+	}	
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -51,7 +48,6 @@
 				}
 			?>
 
-
 			<form method="post" action="login.php">
 				<table>
 					<tr>
@@ -70,7 +66,6 @@
 					</tr>
 				</table>
 			</form>
-
 			<div class=footerContent>
 				<p>Don't have an account?</p>
 				<a href="register.php">Register here!</a>

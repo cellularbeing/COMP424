@@ -1,8 +1,8 @@
 <?php 
 	session_start();
 
-	$db = mysqli_connect("localhost", "root", "root", "Security424"); //ivan
-    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	//$db = mysqli_connect("localhost", "root", "root", "Security424"); //ivan
+    $db = mysqli_connect("localhost", "root", "", "424"); // Steven
 
 ?>
 
@@ -20,7 +20,7 @@
 			<div>
 				<h2>Hi <?php echo $_SESSION['username'];?></h2>
 				<?php	
-					session_start();
+					//session_start(); // Notice alert after login
 
 					$delay=60; 
 					header("Refresh: $delay;");
