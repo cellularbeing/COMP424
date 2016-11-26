@@ -49,6 +49,7 @@
 			}
 		}
 		else{
+			$error = true;
 			$_SESSION['message'] = "missing captca :'(";
 		}
 	}
