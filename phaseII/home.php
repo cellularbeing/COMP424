@@ -1,9 +1,6 @@
 <?php 
 	session_start();
-
-	$db = mysqli_connect("localhost", "root", "root", "Security424"); //ivan
-    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
-
+	require 'db_settings.php';
 ?>
 
 <!DOCTYPE html>

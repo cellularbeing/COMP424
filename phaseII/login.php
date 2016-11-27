@@ -1,8 +1,7 @@
 <?php 
 	session_start();
 	// connect to database
-	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	require 'db_settings.php';
 
 	if (isset($_POST['login_btn'])) {
 
