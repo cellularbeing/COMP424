@@ -1,8 +1,8 @@
 <?php 
 	session_start();
 	// connect to database
-	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-    $db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+    //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
 	$error = false;
 	
 	if (isset($_POST['register_btn'])) {
