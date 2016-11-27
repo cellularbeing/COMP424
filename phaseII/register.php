@@ -1,7 +1,9 @@
 <?php 
 	session_start();
 	require 'theMailer.php';
-	require 'db_settings.php';
+
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
 
 	$error = false;	
 
@@ -58,7 +60,7 @@
 					$stmt->close();
 				}
 				$subject = "COMP424 Authentication Token";
-				$body= "Please use this token: ".$token." in the authentication page to complete registration.";
+				$body= "Hello ".$username.",\r\nPlease use this token: ".$token." in the authentication page to complete your registration.";
 				sendMail($email, $subject, $body);
 				$_SESSION['message'] = "You are now logged in";
 				$_SESSION['username'] = $username;

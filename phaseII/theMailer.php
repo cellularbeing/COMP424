@@ -2,6 +2,8 @@
 
 <?php
 require 'PHPMailer/PHPMailerAutoload.php';
+
+
 function sendMail($to, $subject, $body) {
 	$mail = new PHPMailer(); // create a new object
 	$mail->IsSMTP(); // enable SMTP
@@ -13,7 +15,7 @@ function sendMail($to, $subject, $body) {
 	$mail->IsHTML(true);
 	$mail->Username = "comp424testing@gmail.com";
 	$mail->Password = "tryingtosurvive";
-	$mail->SetFrom("ivan5247@gmail.com");
+	$mail->SetFrom("comp424testing@gmail.com");
 	$mail->Subject = $subject;
 	$mail->Body = $body;
 	$mail->AddAddress($to);
