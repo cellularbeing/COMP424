@@ -3,8 +3,8 @@
 	// connect to database
 	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
     $db = mysqli_connect("localhost", "root", "", "424"); // Steven
-
 	$error = false;
+	
 	if (isset($_POST['register_btn'])) {
 
 		if($_POST['g-recaptcha-response']){ 
@@ -15,20 +15,30 @@
 			$lastName = $_POST['lastName'];
 			$password = $_POST['password'];
 			$password2 = $_POST['password2'];
-            $salt = substr(md5(uniqid(rand(),true)),0,12); // Create random salt
 			$loginCount = 0;
 			$_SESSION['message'] = "Error:";
-			
 	        $captcha=$_POST['g-recaptcha-response'];
-
+			$salt = substr(md5(uniqid(rand(),true)),0,12); // Create random salt
+			
 	        $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LeNugwUAAAAAIpFDAFi9d53x2nEs3IHP-BexsbS&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']);
 			
-			// check if username already exists in database
-			$query = "SELECT * FROM users WHERE username = '$username'";
-			$result = mysqli_query($db, $query);
-			if(mysqli_num_rows($result) > 0){ 
+			//Check if username already exists in DB
+			if($stmt = $db->prepare("SELECT username FROM users WHERE username = ?")){ 
+				$stmt->bind_param('s',$username);
+				$stmt->execute();
+				$stmt->store_result();
+				$rows = $stmt->num_rows();
+				$stmt->close();
+			}
+			
+			if($rows > 0){ 
 				$error = true;
 				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "Username already exists";
+			}
+			
+			if($email === ""){ 
+				$error = true;
+				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "Email required";
 			}
 			
 			// check if password matches
@@ -41,8 +51,14 @@
 			//create user
 			if(!$error && $response.success){
 				$password = hash("sha512", $password . $salt);
-				$sql = "INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$salt', '$loginCount', '$lastName', '$firstName')";
-				mysqli_query($db, $sql);
+				if($stmt = $db->prepare("INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES(?, ?, ?, ?, ?, ?, ?)")){ 
+					$stmt->bind_param('ssssiss', $username, $email, $password, $salt, $loginCount, $lastName, $firstName);
+					//$stmt->store_result();
+					$stmt->execute();
+					$stmt->close();
+				}
+				//$sql = "INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$salt', '$loginCount', '$lastName', '$firstName')";
+				//mysqli_query($db, $sql);
 				$_SESSION['message'] = "You are now logged in";
 				$_SESSION['username'] = $username;
 				header("location: home.php"); //redirect to home page

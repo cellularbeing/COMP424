@@ -9,19 +9,26 @@
 		$_SESSION['last_login_timestamp'] = time();
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-        
-        //Check database for entered username
-		$query = "SELECT * FROM users WHERE username = '$username'";
-		$result = mysqli_query($db, $query);
-		$userRow = mysqli_fetch_assoc($result);
-		$password = hash("sha512", $password . $userRow["salt"]); //hash password with appended salt
+		
+        //Check database for entered username and grab user salt, protected against SQL injection
+		if($stmt = $db->prepare("SELECT password,salt FROM users WHERE username = ?")){
+			$stmt->bind_param("s",$username);
+			$stmt->execute();
+			$stmt->bind_result($passwordDB,$salt);
+			$stmt->fetch();
+			$password = hash("sha512", $password . $salt); //hash password with appended salt
+			$stmt->close();
+		}
 	
 		//Check hashed entered password with password in database
-		if($password === $userRow["password"]){
-			$query = "UPDATE users SET loginCount=loginCount + 1 WHERE username='$username'";
-			mysqli_query($db, $query);
+		if($password === $passwordDB){
+			if($stmt = $db->prepare("UPDATE users SET loginCount=loginCount + 1 WHERE username=?")){ // increase login count, protected against SQL injection
+				$stmt->bind_param("s",$username);
+				$stmt->execute();
+				$stmt->close();
+			}
 			$_SESSION['username'] = $username;
-			header("location: home.php"); //redirect to home page
+			header("location: home.php"); //redirect to home page 
 		}
 		else{
 			$_SESSION['message'] = "Username/password combination incorrect";
