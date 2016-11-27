@@ -1,10 +1,12 @@
 <?php 
 	session_start();
+	require 'theMailer.php';
 	// connect to database
 	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
     //$db = mysqli_connect("localhost", "root", "", "424"); // Steven
 	$error = false;
 	
+
 	if (isset($_POST['register_btn'])) {
 
 		if($_POST['g-recaptcha-response']){ 
@@ -19,7 +21,8 @@
 			$_SESSION['message'] = "Error:";
 	        $captcha=$_POST['g-recaptcha-response'];
 			$salt = substr(md5(uniqid(rand(),true)),0,12); // Create random salt
-			
+			$token = substr(md5(uniqid(rand(),true)),0,8);
+
 	        $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LeNugwUAAAAAIpFDAFi9d53x2nEs3IHP-BexsbS&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']);
 			
 			//Check if username already exists in DB
@@ -51,11 +54,14 @@
 			//create user
 			if(!$error && $response.success){
 				$password = hash("sha512", $password . $salt);
-				if($stmt = $db->prepare("INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES(?, ?, ?, ?, ?, ?, ?)")){ 
-					$stmt->bind_param('ssssiss', $username, $email, $password, $salt, $loginCount, $lastName, $firstName);
+				if($stmt = $db->prepare("INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName, token) VALUES(?, ?, ?, ?, ?, ?, ?, ?)")){ 
+					$stmt->bind_param('ssssisss', $username, $email, $password, $salt, $loginCount, $lastName, $firstName, $token);
 					$stmt->execute();
 					$stmt->close();
 				}
+				$subject = "COMP424 Authentication Token";
+				$body= "Please use this token: ".$token." in the authentication page to complete registration.";
+				sendMail($email, $subject, $body);
 				$_SESSION['message'] = "You are now logged in";
 				$_SESSION['username'] = $username;
 				header("location: home.php"); //redirect to home page
