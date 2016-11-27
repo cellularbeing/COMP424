@@ -53,12 +53,9 @@
 				$password = hash("sha512", $password . $salt);
 				if($stmt = $db->prepare("INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES(?, ?, ?, ?, ?, ?, ?)")){ 
 					$stmt->bind_param('ssssiss', $username, $email, $password, $salt, $loginCount, $lastName, $firstName);
-					//$stmt->store_result();
 					$stmt->execute();
 					$stmt->close();
 				}
-				//$sql = "INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName) VALUES('$username', '$email', '$password', '$salt', '$loginCount', '$lastName', '$firstName')";
-				//mysqli_query($db, $sql);
 				$_SESSION['message'] = "You are now logged in";
 				$_SESSION['username'] = $username;
 				header("location: home.php"); //redirect to home page
