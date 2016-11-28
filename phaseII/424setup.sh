@@ -20,13 +20,16 @@ sudo apt-get install php5
 #This command allows us to view and modify databases in the browser
 sudo apt-get install phpmyadmin
 
-#This command is used to set up a general information page about the characterisitcs of
-#the PHP version that is currently running on the system
-sudo echo "<?php phpinfo(); ?>" >> /var/www/html/info.php
+#This command installs git which is necessary to retrieve the project files
+sudo apt-get install git
 
 #This command gives the user and groups reading, writing, and executing priviledges on the file path
 #/var/www/html. This allows us to place code in the respective file to make it live in the web
 sudo chmod -R ugo+rwx /var/www/html
+
+#This command is used to set up a general information page about the characterisitcs of
+#the PHP version that is currently running on the system
+sudo echo "<?php phpinfo(); ?>" >> /var/www/html/info.php
 
 #This command create a folder where the databses backup file will live
 mkdir /var/www/html/db_backup
