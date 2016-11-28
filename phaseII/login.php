@@ -76,6 +76,8 @@
 			<div class=footerContent>
 				<p>Don't have an account?</p>
 				<a href="register.php">Register here!</a>
+				<p>Forgot username/password?</p>
+				<a href="reset.php">Reset here!</a>				
 			</div>
 		</div>
 	</body>
