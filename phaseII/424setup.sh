@@ -24,4 +24,4 @@ cd ~
 #EOF
 
 echo "++INPUT MYSQL PASSWORD++"
-mysql -u root -p -e "create database Security424; use Security424; create table users (id int not null auto_increment, primary key (id), username varchar(255), email varchar(255), password varchar(255), salt varchar(12), loginCount int(100), firstName varchar(255), lastName varchar(255), unique (username, email) ); describe users;"
+mysql -u root -p -e "create database Security424; use Security424; create table users (id int not null auto_increment, primary key (id), username varchar(255), email varchar(255), password varchar(255), salt varchar(12), loginCount int(100), firstName varchar(255), lastName varchar(255), token varchar(255), unique (username, email) ); describe users;"
