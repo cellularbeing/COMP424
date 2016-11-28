@@ -50,6 +50,7 @@
 								if($postToken == $loginToken){
 									$sql = "UPDATE users SET token=-1 WHERE username= '$username'";
 									$db->query($sql);
+									header("Refresh:0");
 								}
 
 							}
