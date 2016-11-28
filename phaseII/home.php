@@ -20,19 +20,6 @@
 				<?php	
 					//session_start(); // Notice alert after login
 
-					if(isset($_POST['auth_btn'])){
-						$postToken = $_POST['token'];
-						$user = $_SESSION['username'];
-			           	$sql = "SELECT token FROM users WHERE username= '$user'";
-			           	$result = $db->query($sql);
-			           	$row = $result->fetch_assoc();
-			           	$loginToken = $row['token'];	
-						if($postToken == $postToken){
-							$sql = "UPDATE users SET token=-1 WHERE username= '$user'";
-							$db->query($sql);
-						}
-					}
-
 					$delay=60; 
 					header("Refresh: $delay;");
 					if(isset($_SESSION["username"]))  
@@ -51,17 +38,31 @@
 			           		$loginToken = $row['token'];
 
 			           		//echo "<p>Token: ".$loginToken." </p>";
-			           		if($loginToken == -1){ //registered flag
-				           		echo "<p>You will be logged out in ".$delay. "seconds.</p>";  
-								$username = $_SESSION['username'];
+			           		echo "<p>You will be logged out in ".$delay. "seconds.</p>";  
+					        if(isset($_POST['auth_btn'])){
+								$postToken = $_POST['token'];
+					           	$sql = "SELECT token FROM users WHERE username= '$username'";
+					           	$result = $db->query($sql);
+					           	$row = $result->fetch_assoc();
+					           	$loginToken = $row['token'];
+
+					           	//$_SESSION['username'] = $username;	
+								if($postToken == $loginToken){
+									$sql = "UPDATE users SET token=-1 WHERE username= '$username'";
+									$db->query($sql);
+								}
+
+							}
+			           		else if($loginToken == -1){ //registered flag
 								$sql = "SELECT loginCount FROM users WHERE username= '$username'";
 								$result = $db->query($sql);
-								
+								$row = $result->fetch_assoc();
 								echo "<p>You have logged in: ".$row['loginCount']." times.</p>"; 
 							}
 							else {
+								$_SESSION['username'] = $username;
 								echo "<p>You are not have not been authenticated.</p>";
-
+								echo "<p>Check your email for a authentication token.</p>";
 								echo "
 								<form method='post' action='home.php'>
 									<table>				
@@ -71,7 +72,7 @@
 										</tr>
 										<tr>
 											<td></td>
-											<td><input type='submit' name='auth_btn' value='authentication'></td>
+											<td><input type='submit' name='auth_btn' value='authenticate'></td>
 										</tr>
 									</table>
 								</form>
