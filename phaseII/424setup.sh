@@ -2,7 +2,7 @@
 
 #This echo is used to prompt the user to enter their root password
 #so that the system can install and setup the necessary components for the server
-echo "++INPUT ROOT PASSWORD++"
+echo "++INPUT SUPERUSER PASSWORD++"
 
 #This command first updates the systems packages to make sure everyting is up to date
 sudo apt-get update
@@ -44,7 +44,7 @@ sudo git clone https://comp424repo@bitbucket.org/comp424repo/424projectphase2.gi
 
 #This command gives reading. writing, and executing priviledges to the folder COMP424
 #This is done so the the website can be modified
-sudo chmod -R ugo+rwx /var/www/html/COMP424
+sudo chmod -R ugo+rwx /var/www/html/424projectphase2
 
 #This command prompts the user to input the password they set up in order to creat the databse abd tables
 echo "++INPUT MYSQL PASSWORD FOR DB SETUP++"
