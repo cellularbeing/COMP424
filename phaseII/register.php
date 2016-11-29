@@ -2,8 +2,8 @@
 	session_start();
 	require 'theMailer.php';
 
-	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+	$db = mysqli_connect("localhost", "root", "", "424"); // Steven
 
 	$error = false;	
 
@@ -34,6 +34,15 @@
 				$stmt->close();
 			}
 			
+			//Check if email already exists in DB
+			if($stmt = $db->prepare("SELECT email FROM users WHERE email = ?")){ 
+				$stmt->bind_param('s',$email);
+				$stmt->execute();
+				$stmt->bind_result($email2);
+				$stmt->fetch();
+				$stmt->close();
+			}
+			
 			if($rows > 0){ 
 				$error = true;
 				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "Username already exists";
@@ -42,6 +51,9 @@
 			if($email === ""){ 
 				$error = true;
 				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "Email required";
+			}else if($email === $email2){
+				$error = true;
+				$_SESSION['message'] = $_SESSION['message'] . "<br>" . "Email already exists";
 			}
 			
 			// check if password matches
