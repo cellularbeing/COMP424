@@ -27,19 +27,25 @@
     				{  
 			           if((time() - $_SESSION['last_login_timestamp']) > 59)  
 			           {  
+			           		$username = $_SESSION['username'];
+			           		$date = date('Y-m-d H:i:s');
+			           		$sql = "UPDATE users SET lastLogged='$date' WHERE username= '$username'";
+			           		$db->query($sql);
 			                header("location:logout.php");
 			                //echo "<meta http-equiv= 'refresh' content='0'>";
 			           }  
 			           else  
 			           {  
 			           		$username = $_SESSION['username'];
-			           		$sql = "SELECT token FROM users WHERE username= '$username'";
+			           		$sql = "SELECT token, lastLogged FROM users WHERE username= '$username'";
 			           		$result = $db->query($sql);
 			           		$row = $result->fetch_assoc();
 			           		$loginToken = $row['token'];
+			           		$lastLogged = $row['lastLogged'];
 
 			           		//echo "<p>Token: ".$loginToken." </p>";
 			           		echo "<p>You will be logged out in ".$delay. "seconds.</p>";  
+			           		echo "<p>You were last logged in on ".$lastLogged. "</p>"; 
 					        if(isset($_POST['auth_btn'])){
 								$postToken = $_POST['token'];
 					           	$sql = "SELECT token FROM users WHERE username= '$username'";

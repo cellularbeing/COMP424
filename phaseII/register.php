@@ -12,6 +12,7 @@
 		if($_POST['g-recaptcha-response']){ 
 			//session_start(); // Notice alert
 			$username = $_POST['username'];
+			$date = date('Y-m-d H:i:s');
 			$email = $_POST['email'];
 			$firstName = $_POST['firstName'];
 			$lastName = $_POST['lastName'];
@@ -66,8 +67,8 @@
 			//create user
 			if(!$error && $response.success){
 				$password = hash("sha512", $password . $salt);
-				if($stmt = $db->prepare("INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName, token) VALUES(?, ?, ?, ?, ?, ?, ?, ?)")){ 
-					$stmt->bind_param('ssssisss', $username, $email, $password, $salt, $loginCount, $lastName, $firstName, $token);
+				if($stmt = $db->prepare("INSERT INTO users(username, email, password, salt, loginCount, lastName, firstName, token, lastLogged) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)")){ 
+					$stmt->bind_param('ssssissss', $username, $email, $password, $salt, $loginCount, $lastName, $firstName, $token, $date);
 					$stmt->execute();
 					$stmt->close();
 				}
