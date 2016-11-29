@@ -40,7 +40,7 @@ cd /var/www/html
 
 #This command clones the project from github.
 #This allows the system to recieve all of the project code
-sudo git clone https://github.com/iuc73663/COMP424.git
+sudo git clone https://comp424repo@bitbucket.org/comp424repo/424projectphase2.git
 
 #This command gives reading. writing, and executing priviledges to the folder COMP424
 #This is done so the the website can be modified
