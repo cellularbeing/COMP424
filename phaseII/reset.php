@@ -1,11 +1,25 @@
 <?php 
 	session_start();
+	require 'theMailer.php';
 	// connect to database
-	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
 	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
 
 	if (isset($_POST['reset_btn'])) {
-		
+		$email = $_POST['email'];
+		$sql = "SELECT username, token, salt FROM users WHERE email= '$email'";
+		$result = $db->query($sql);
+		$row = $result->fetch_assoc();
+		$username = $row['username'];
+		$salt = $row['salt'];
+		$token = $row['token'];
+		$passwordReset = substr(md5(uniqid(rand(),true)),0,8);
+		$password = hash("sha512", $passwordReset . $salt);
+		$sql = "UPDATE users SET password='$password' WHERE username= '$username'";
+		$db->query($sql);
+		$subject = "COMP424 Password Reset";
+		$body= "Hello ".$username.",\r\nPlease use this as your temporary password: ".$passwordReset." to log in.";
+		sendMail($email, $subject, $body);
 	}	
 ?>
 

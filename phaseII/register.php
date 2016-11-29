@@ -1,10 +1,10 @@
 <?php 
 	session_start();
 	require 'theMailer.php';
-
-	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-	$db = mysqli_connect("localhost", "root", "", "424"); // Steven
-
+	//db setttings
+	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+	
 	$error = false;	
 
 	if (isset($_POST['register_btn'])) {

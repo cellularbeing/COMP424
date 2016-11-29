@@ -1,7 +1,9 @@
 <?php 
 	session_start();
-	//$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-	$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	//connect to db
+	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+
 ?>
 
 <!DOCTYPE html>
