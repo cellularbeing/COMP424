@@ -17,9 +17,12 @@
 		$password = hash("sha512", $passwordReset . $salt);
 		$sql = "UPDATE users SET password='$password' WHERE username= '$username'";
 		$db->query($sql);
+		$sql = "UPDATE users SET token=-2 WHERE username= '$username'";
+		$db->query($sql);
 		$subject = "COMP424 Password Reset";
 		$body= "Hello ".$username.",\r\nPlease use this as your temporary password: ".$passwordReset." to log in.";
 		sendMail($email, $subject, $body);
+		header("location: login.php");
 	}	
 ?>
 

@@ -3,7 +3,6 @@
 	//connect to db
 	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
 	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
-
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +55,39 @@
 								}
 
 							}
+					        else if(isset($_POST['passUpdate_btn'])){
+								$pass = $_POST['newPassword'];
+
+					           	$sql = "SELECT salt FROM users WHERE username= '$username'";
+					           	$result = $db->query($sql);
+					           	$row = $result->fetch_assoc();
+					           	$salt = $row['salt'];
+								$newPass = hash("sha512", $pass . $salt);
+					           	$sql = "UPDATE users SET password = '$newPass' WHERE username= '$username'";
+					           	$db->query($sql);
+								$sql = "UPDATE users SET token=-1 WHERE username= '$username'";
+								$db->query($sql);           	
+					           	header("location: login.php");
+
+							}							
+			           		else if($loginToken == -2){ //registered flag
+								echo "<p>Password Reset.</p>";
+								echo "<p>Please enter a new password.</p>";
+								echo "
+								<form method='post' action='home.php'>
+									<table>				
+										<tr>
+											<td>password:</td>
+											<td><input type='newPassword' name='newPassword' class='textInput'></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td><input type='submit' name='passUpdate_btn' value='Update'></td>
+										</tr>
+									</table>
+								</form>
+								"; 
+							}							
 			           		else if($loginToken == -1){ //registered flag
 								$sql = "SELECT loginCount FROM users WHERE username= '$username'";
 								$result = $db->query($sql);
