@@ -38,7 +38,7 @@ mkdir /var/www/html/db_backup
 #new folder that make the project work will go
 cd /var/www/html
 
-#This command clones the project from github.
+#This command clones the project from the private repository hosted at BitBucket.
 #This allows the system to recieve all of the project code
 sudo git clone https://comp424repo@bitbucket.org/comp424repo/424projectphase2.git
 
@@ -50,7 +50,7 @@ sudo chmod -R ugo+rwx /var/www/html/424projectphase2
 echo "++INPUT MYSQL PASSWORD FOR DB SETUP++"
 
 #This command generates the databse and tables that will be used for the website
-mysql -u root -p -e "create database Security424; use Security424; create table users (id int not null auto_increment, primary key (id), username varchar(255), email varchar(255), password varchar(255), salt varchar(12), loginCount int(100), firstName varchar(255), lastName varchar(255), token varchar(255), unique (username, email) ); describe users;"
+mysql -u root -p -e "create database Security424; use Security424; create table users (id int not null auto_increment, primary key (id), username varchar(255) not null, email varchar(255) not null, password varchar(255) not null, loginCount int(100) not null, firstName varchar(255) not null, lastName varchar(255) not null, salt varchar(12) not null, token varchar(255) not null, lastLogged varchar(255) not null, unique (username, email)); describe users;"
 
 #This command prompts the user to input their mysql password again to create backup file for the databse
 echo "++ENTER MYSQL PASSWORD AGAIN FOR DB BACK UP++"
