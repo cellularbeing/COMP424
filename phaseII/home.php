@@ -16,7 +16,7 @@
 	<body>
 		<div class="mainContent">
 			<div>
-				<h2>Hi <?php echo $_SESSION['username'];?></h2>
+				<h2>Hi <?php echo htmlentities($_SESSION['username'], ENT_QUOTES | ENT_HTML5, 'UTF-8');?></h2>
 				<?php	
 					//session_start(); // Notice alert after login
 

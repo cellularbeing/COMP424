@@ -100,7 +100,7 @@
 <body>
 		<?php
 			if ($error) {
-				echo "<div id='error_msg'>".$_SESSION['message']."</div>";
+				echo "<div id='error_msg'>" . $_SESSION['message'] . "</div>";
 				unset($_SESSION['message']);
 			}
 		?>
