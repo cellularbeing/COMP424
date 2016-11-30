@@ -1,5 +1,6 @@
 <?php
-	$db = mysqli_connect("localhost", "root", "P@_427!,K-^c612", "Security424");//login
+	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
 	session_start();
 	$username = $_SESSION['username'];
 	$date = date('Y-m-d H:i:s');

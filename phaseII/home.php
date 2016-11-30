@@ -1,7 +1,8 @@
 <?php 
 	session_start();
 	//connect to db
-	$db = mysqli_connect("localhost", "root", "P@_427!,K-^c612", "Security424");//login
+	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
+	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +17,7 @@
 	<body>
 		<div class="mainContent">
 			<div>
-				<h2>Hi <?php echo htmlentities($_SESSION['username'], ENT_QUOTES | ENT_HTML5, 'UTF-8');?></h2>
+				<h2><?php //echo htmlentities($_SESSION['username'], ENT_QUOTES | ENT_HTML5, 'UTF-8');?></h2>
 				<?php	
 					//session_start(); // Notice alert after login
 
@@ -36,15 +37,14 @@
 			           else  
 			           {  
 			           		$username = $_SESSION['username'];
-			           		$sql = "SELECT token, lastLogged FROM users WHERE username= '$username'";
+			           		$sql = "SELECT token FROM users WHERE username= '$username'";
 			           		$result = $db->query($sql);
 			           		$row = $result->fetch_assoc();
 			           		$loginToken = $row['token'];
-			           		$lastLogged = $row['lastLogged'];
+			           		//$lastLogged = $row['lastLogged'];
 
 			           		//echo "<p>Token: ".$loginToken." </p>";
-			           		echo "<p>You will be logged out in ".$delay. "seconds.</p>";  
-			           		echo "<p>You were last logged in on ".$lastLogged. "</p>"; 
+			           	 	 
 					        if(isset($_POST['auth_btn'])){
 								$postToken = $_POST['token'];
 					           	$sql = "SELECT token FROM users WHERE username= '$username'";
@@ -76,14 +76,14 @@
 
 							}							
 			           		else if($loginToken == -2){ //registered flag
-								echo "<p>Password Reset.</p>";
+								echo "<h2>Password Reset.</h2>";
 								echo "<p>Please enter a new password.</p>";
 								echo "
 								<form method='post' action='home.php'>
 									<table>				
 										<tr>
 											<td>password:</td>
-											<td><input type='newPassword' name='newPassword' class='textInput'></td>
+											<td><input type='password' name='newPassword' class='textInput'></td>
 										</tr>
 										<tr>
 											<td></td>
@@ -94,21 +94,38 @@
 								"; 
 							}							
 			           		else if($loginToken == -1){ //registered flag
-								$sql = "SELECT loginCount FROM users WHERE username= '$username'";
+								$sql = "SELECT firstName, lastName, loginCount, lastLogged FROM users WHERE username= '$username'";
 								$result = $db->query($sql);
 								$row = $result->fetch_assoc();
-								echo "<p>You have logged in: ".$row['loginCount']." times.</p>"; 
+
+								echo "<h2>Hi ".$row['firstName']." ".$row['lastName']."!</h2>";
+								echo "
+									<table>
+										<tr>
+											<td>Username: </td>
+											<td>".$username."</td>
+										</tr>
+										<tr>
+											<td>Logged in: </td>
+											<td>".$row['loginCount']." times</td>
+										</tr>
+										<tr>
+											<td>Last Logged in: </td>
+											<td>".$row['lastLogged']."</td>
+										</tr>											
+									</table><br>
+								"; 
 							}
 							else {
 								$_SESSION['username'] = $username;
-								echo "<p>You are not have not been authenticated.</p>";
-								echo "<p>Check your email for a authentication token.</p>";
+								echo "<h2><font color='red'>You are not have not been authenticated.<font></h2><br>";
+								echo "<p>Check your email for an authentication token.</p>";
 								echo "
 								<form method='post' action='home.php'>
 									<table>				
 										<tr>
 											<td>Token:</td>
-											<td><input type='token' name='token' class='textInput'></td>
+											<td><input type='password' name='token' class='textInput'></td>
 										</tr>
 										<tr>
 											<td></td>
@@ -122,13 +139,16 @@
      				}  
 			      	else  
 			      	{  
-			           header('location:login.php');  
+			        	header('location:login.php');  
 			      	}
 
 					//echo "<p>You have logged in: times.".$testing."</p>";
 				?>
 			</div>
 			<div>
+				<?php
+			      	echo "<p><font color='red'>You will be logged out in ".$delay. " seconds.</font></p>";
+				?>
 				<a href="logout.php">Logout</a>
 			</div>
 	</body>
