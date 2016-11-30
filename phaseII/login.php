@@ -1,8 +1,7 @@
 <?php 
 	session_start();
 	//db setttings
-	//$db = mysqli_connect("localhost", "root", "", "424"); // Steven
-	$db = mysqli_connect("localhost", "root", "root", "Security424");//ivan
+	$db = mysqli_connect("localhost", "root", "P@_427!,K-^c612", "Security424");//login
 
 	if (isset($_POST['login_btn'])) {
 
@@ -74,10 +73,9 @@
 				</table>
 			</form>
 			<div class=footerContent>
-				<p>Don't have an account?</p>
-				<a href="register.php">Register here!</a>
-				<p>Forgot username/password?</p>
-				<a href="reset.php">Reset here!</a>				
+				<p>Don't have an account? <a href="register.php">Register here!</a></p>
+				<p>Forgot username/password? <a href="reset.php">Reset here!</a></p>
+								
 			</div>
 		</div>
 	</body>
